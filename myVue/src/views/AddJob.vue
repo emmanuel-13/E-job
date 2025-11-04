@@ -33,7 +33,7 @@ const toggleSubmit = async () => {
     const response = await axios.post('/api/jobs', form)
     toast.success('Job successfully submitted')
     // form.clear();
-    router.push(`/jobs/${response.data.id}`)
+    router.push(`/jobs/${response.data.job.id}`)
   } catch (error) {
     console.error('Failed to submit job', error)
     toast.error('Failed to submit job. Please try again.')
@@ -44,7 +44,7 @@ const toggleUpdate = async () => {
   try {
     const response = await axios.put(`/api/jobs/${jobId}`, form)
     toast.success('Job successfully updated')
-    router.push(`/jobs/${response.data.id}`)
+    router.push(`/jobs/${response.data.job.id}`)
   } catch (error) {
     console.error('Failed to update job', error)
     toast.error('Failed to update job. Please try again.')
