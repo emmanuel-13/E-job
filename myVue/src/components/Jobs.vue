@@ -26,7 +26,7 @@
         try {
             const response = await axios.get("/api/jobs");
             // job.value = response.data;  // using ref
-            state.job = response.data;  // using reactive
+            state.job = response.data.jobs;  // using reactive
         } catch (error) {
             console.error("Error fetching job listings:", error);
         } finally {

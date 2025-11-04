@@ -30,7 +30,7 @@ const form = reactive({
 
 const toggleSubmit = async () => {
   try {
-    const response = await axios.post('http://localhost:8000/jobs', form)
+    const response = await axios.post('/api/jobs', form)
     toast.success('Job successfully submitted')
     // form.clear();
     router.push(`/jobs/${response.data.id}`)
@@ -42,7 +42,7 @@ const toggleSubmit = async () => {
 
 const toggleUpdate = async () => {
   try {
-    const response = await axios.put(`http://localhost:8000/jobs/${jobId}`, form)
+    const response = await axios.put(`/api/jobs/${jobId}`, form)
     toast.success('Job successfully updated')
     router.push(`/jobs/${response.data.id}`)
   } catch (error) {

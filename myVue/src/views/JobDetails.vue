@@ -32,25 +32,37 @@
         }
     };
 
+    // onMounted(async () => {
+    //     try {
+    //         // First get all jobs
+    //         const response = await axios.get('/api/jobs');
+    //         // Find the specific job
+    //         // Compare as strings to support backends that return string IDs (e.g. "074f")
+    //         const job = response.data.find(job => String(job.id) === String(jobId));
+    //         if (!job) {
+    //             state.error = `Job with ID ${jobId} not found`;
+    //             return;
+    //         }
+    //         state.job = job;
+    //     } catch (error) {
+    //         console.error("Error fetching job listings:", error);
+    //         state.error = "Error loading job details. Please try again later.";
+    //     } finally {
+    //         state.isLoading = false;
+    //     }
+    // })
     onMounted(async () => {
         try {
-            // First get all jobs
-            const response = await axios.get('/api/jobs');
-            // Find the specific job
-            // Compare as strings to support backends that return string IDs (e.g. "074f")
-            const job = response.data.find(job => String(job.id) === String(jobId));
-            if (!job) {
-                state.error = `Job with ID ${jobId} not found`;
-                return;
-            }
-            state.job = job;
+            const response = await axios.get(`/api/jobs/${jobId}`);
+            state.job = response.data;
         } catch (error) {
-            console.error("Error fetching job listings:", error);
+            console.error("Error fetching job details:", error);
             state.error = "Error loading job details. Please try again later.";
         } finally {
             state.isLoading = false;
         }
-    })
+        });
+
 </script>
 
 <template>
