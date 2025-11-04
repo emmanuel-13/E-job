@@ -1,5 +1,5 @@
 <script setup>
-    import joblisting from './Joblisting.vue';
+    import joblisting from '@/Joblisting.vue';
     import { reactive, defineProps, onMounted, inject } from 'vue';
     import { RouterLink } from 'vue-router';
     import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
