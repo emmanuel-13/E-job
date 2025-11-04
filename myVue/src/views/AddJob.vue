@@ -54,7 +54,7 @@ const toggleUpdate = async () => {
 if (jobId) {
   onMounted(async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/jobs/${jobId}`)
+      const response = await axios.get(`/api/jobs/${jobId}`)
       state.job = response.data
       Object.assign(form, state.job)
       form.company = { ...state.job.company }
