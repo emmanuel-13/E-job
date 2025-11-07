@@ -8,9 +8,10 @@
     // using ref
     // const job = ref([]);
 
+
     const state = reactive({
         job: [],
-        isLoading: true
+        isLoading: true,
     })
 
     defineProps({
@@ -27,6 +28,7 @@
             const response = await axios.get("/api/jobs");
             // job.value = response.data;  // using ref
             state.job = response.data.jobs;  // using reactive
+
         } catch (error) {
             console.error("Error fetching job listings:", error);
         } finally {
@@ -51,6 +53,7 @@
             
         <div v-else>
         <h3 class="text-center py-4 px-3 text-2xl"> Found {{ state.job.slice(0, limit).length }} job{{ state.job.length !== 1 ? 's' : '' }} available </h3>
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             
             <joblisting v-for="jobs in state.job.slice(0, limit || state.job.length)" 
