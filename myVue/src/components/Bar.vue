@@ -34,7 +34,7 @@ onMounted(async () => {
 });
 </script>
 
-<template>
+<!-- <template>
   <section class="bg-gray-50 py-12 min-h-screen flex flex-col justify-center">
     <div class="text-center mb-8">
       <h2 class="text-3xl font-bold text-green-600 mb-2">
@@ -48,6 +48,36 @@ onMounted(async () => {
     </div>
 
     <div v-else class="flex justify-center items-center">
+      <Chart
+        :labels="state.jobTitle"
+        :data="state.jobSalary"
+        label="Salary ($)"
+      />
+    </div>
+  </section>
+</template> -->
+
+
+<template>
+  <section class="bg-gray-50 py-12 min-h-screen flex flex-col justify-center">
+    <div class="text-center mb-8 animate__animated animate__fadeInDown">
+      <h2 class="text-3xl font-bold text-green-600 mb-2">
+        Salary Chart by Job Title
+      </h2>
+      <p class="text-gray-600">A visualization of salaries for each position</p>
+    </div>
+
+    <div
+      v-if="state.isLoading"
+      class="flex justify-center items-center my-10 animate__animated animate__pulse animate__infinite"
+    >
+      <PulseLoader :loading="state.isLoading" color="#34D399" size="15px" />
+    </div>
+
+    <div
+      v-else
+      class="flex justify-center items-center animate__animated animate__fadeInUp"
+    >
       <Chart
         :labels="state.jobTitle"
         :data="state.jobSalary"

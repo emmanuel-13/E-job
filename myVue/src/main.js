@@ -3,6 +3,7 @@ import 'primeicons/primeicons.css'
 import routers from './router'
 import Toast, { POSITION } from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import 'animate.css';
 
 
 import { createApp } from 'vue'
