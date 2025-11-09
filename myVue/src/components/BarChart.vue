@@ -70,8 +70,8 @@ const chartOptions = {
 
 <template>
   <!-- ✅ Center and size chart properly -->
-  <div class="flex justify-center items-center w-full  h-[400px] md:h-[400px]">
-    <div class="w-[90%] md:w-[70%] h-full">
+  <div class="flex justify-center items-center w-full  h-[200px] md:h-[400px]">
+    <div class="w-[90%] md:w-[50%] h-full">
       <Bar :data="chartData" :options="chartOptions" />
     </div>
   </div>

@@ -59,8 +59,8 @@ onMounted(async () => {
 
 
 <template>
-  <section class="bg-gray-50 py-12 min-h-screen flex flex-col justify-center">
-    <div class="text-center mb-8 animate__animated animate__fadeInDown">
+  <section class="bg-gray-50 min-h-screen flex flex-col justify-center">
+    <div class="text-center mb-3 animate__animated animate__fadeInDown">
       <h2 class="text-3xl font-bold text-green-600 mb-2">
         Salary Chart by Job Title
       </h2>

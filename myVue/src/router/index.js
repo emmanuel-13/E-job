@@ -37,11 +37,6 @@ const routers = createRouter({
             component: AddJob,
         },
         {
-            path: "/jobs/:id/edit",
-            name: "edit-jobs",
-            component: AddJob,
-        },
-        {
             path: "/jobs/:id",
             name: "jobsdetail",
             component: JobDetail,
