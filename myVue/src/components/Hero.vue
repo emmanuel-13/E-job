@@ -1,52 +1,40 @@
 <script setup>
 import { ref, computed } from "vue"
-import "animate.css"
+
+// Glob import all images in the folder
+const images = import.meta.glob("/src/assets/img/*.{jpg,png,jpeg}", { eager: true, as: 'url' })
 
 // Array of hero slides
 const slides = ref([
   {
     id: 1,
     title: "Digital Experience",
-    subtitle:
-      "Build, design, and deploy fast with modern tools. Explore limitless possibilities with our intuitive platform.",
-    image: "/src/assets/img/5995587.jpg",
+    subtitle: "Build, design, and deploy fast with modern tools.",
+    image: images["/src/assets/img/5995587.jpg"], // resolved URL
   },
   {
     id: 2,
     title: "Innovation Meets Speed",
-    subtitle:
-      "Deliver exceptional digital products with unmatched efficiency and creative freedom.",
-    image: "/src/assets/img/589.jpg",
+    subtitle: "Deliver exceptional digital products efficiently.",
+    image: images["/src/assets/img/589.jpg"],
   },
   {
     id: 3,
     title: "Empower Your Team",
-    subtitle:
-      "Collaborate seamlessly, accelerate development, and scale your business with confidence.",
-    image: "/src/assets/img/5883.jpg",
+    subtitle: "Collaborate seamlessly and scale your business.",
+    image: images["/src/assets/img/5883.jpg"],
   },
 ])
 
 const currentIndex = ref(0)
-
-// Computed current slide
 const currentSlide = computed(() => slides.value[currentIndex.value])
 
-// Navigation
-const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % slides.value.length
-}
+const nextSlide = () => (currentIndex.value = (currentIndex.value + 1) % slides.value.length)
+const prevSlide = () => (currentIndex.value = (currentIndex.value - 1 + slides.value.length) % slides.value.length)
 
-const prevSlide = () => {
-  currentIndex.value =
-    (currentIndex.value - 1 + slides.value.length) % slides.value.length
-}
-
-// Auto-slide every 7 seconds
-setInterval(() => {
-  nextSlide()
-}, 7000)
+setInterval(nextSlide, 7000)
 </script>
+
 
 <template>
   <section
