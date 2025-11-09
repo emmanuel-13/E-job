@@ -1,16 +1,12 @@
 <script setup>
 import joblisting from './JobListing.vue';
-import { reactive, defineProps, onMounted, computed } from 'vue';
+import { defineProps, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import axios from "axios";
+import { useJobStore } from '@/store/jobs';
 
-const state = reactive({
-  job: [],
-  isLoading: true,
-  searchQuery: '',
-  searchFilter: 'all'
-});
+const jobStore = useJobStore();
+
 
 defineProps({
   limit: Number,
@@ -21,37 +17,11 @@ defineProps({
 });
 
 // ✅ Computed: Filter jobs by type and search query
-const filteredJobs = computed(() => {
-  let jobs = state.job;
-
-  if (state.searchFilter !== 'all') {
-    jobs = jobs.filter(job => job.type.toLowerCase() === state.searchFilter);
-  }
-
-  if (state.searchQuery) {
-    jobs = jobs.filter(job =>
-      job.title.toLowerCase().includes(state.searchQuery.toLowerCase())
-    );
-  }
-
-  return jobs;
-});
-
 onMounted(async () => {
-  try {
-    const response = await axios.get("/api/jobs");
-    state.job = response.data.jobs;
-  } catch (error) {
-    console.error("Error fetching job listings:", error);
-  } finally {
-    state.isLoading = false;
+  if (jobStore.state.job.length === 0) {
+    jobStore.fetchJobs();
   }
 });
-
-// ✅ Update filter when a button is clicked
-function setFilter(type) {
-  state.searchFilter = type;
-}
 </script>
 
 <template>
@@ -63,20 +33,20 @@ function setFilter(type) {
     </div>
 
     <!-- show loading spinner if data is being fetched -->
-    <div v-if="state.isLoading" class="flex justify-center items-center my-10">
-      <PulseLoader :loading="state.isLoading" color="#34D399" size="15px" />
+    <div v-if="jobStore.state.isLoading" class="flex justify-center items-center my-10">
+      <PulseLoader :loading="jobStore.state.isLoading" color="#34D399" size="15px" />
     </div>
 
     <div v-else>
       <h3 class="text-center py-6 px-3 text-2xl">
-        Found {{ filteredJobs.slice(0, limit).length }} job{{ filteredJobs.length !== 1 ? 's' : '' }} available
+        Found {{ jobStore.filteredJobs.slice(0, limit).length }} job{{ jobStore.filteredJobs.length !== 1 ? 's' : '' }} available
       </h3>
 
       <div class="container-xl lg:container mx-auto mb-8 px-4">
         <!-- Search Bar -->
         <div class="flex flex-col sm:flex-row gap-4 items-center">
           <input
-            v-model="state.searchQuery"
+            v-model="jobStore.state.searchQuery"
             type="text"
             placeholder="Search jobs..."
             class="w-full sm:flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
@@ -88,10 +58,10 @@ function setFilter(type) {
           <button
             v-for="type in ['all', 'full-time', 'part-time', 'contract', 'internship']"
             :key="type"
-            @click="setFilter(type)"
+            @click="jobStore.setFilter(type)"
             :class="[
               'px-4 py-2 rounded-lg transition font-medium',
-              state.searchFilter === type
+              jobStore.state.searchFilter === type
                 ? 'bg-green-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             ]"
@@ -102,9 +72,9 @@ function setFilter(type) {
       </div>
 
       <!-- Job Listings -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-3" v-if="filteredJobs.length > 0">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3" v-if="jobStore.filteredJobs.length > 0">
         <joblisting
-            v-for="jobs in filteredJobs.slice(0, limit || filteredJobs.length)"
+            v-for="jobs in jobStore.filteredJobs.slice(0, limit || jobStore.filteredJobs.length)"
             :key="jobs.id"
             :jobs="jobs"
             class="animate__animated animate__fadeInUp animate__faster"
