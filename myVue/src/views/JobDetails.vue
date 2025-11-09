@@ -277,18 +277,42 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useJobStore  } from "@/store/jobs";
 import axios  from "axios";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 const jobStore = useJobStore();
 
 const { state } = storeToRefs(jobStore);
 
-// const route = useRoute();
-// const jobId = route.params.id;
+const route = useRoute();
+const jobId = route.params.id;
 
 // fetch job details
 onMounted(async () => {
-    jobStore.fetchSingleJob();
+    try {
+      const response = await axios.get(`/api/jobs/${jobId}`);
+      // assume API returns job object directly or under data.job
+      // try common shapes
+      const data = response.data && (response.data.job || response.data);
+      // merge into state.job to preserve reactivity & shape
+      jobStore.state.job_single = {
+      id: data.id ?? jobStore.state.job_single.id,
+      title: data.title ?? "",
+      salary: data.salary ?? "",
+      description: data.description ?? "",
+      type: data.type ?? "",
+      company: {
+          name: data.company?.name ?? (data.company_name ?? ""),
+          industry: data.company?.industry ?? (data.company_industry ?? ""),
+          website: data.company?.website ?? (data.company_website ?? ""),
+          location: data.company?.location ?? (data.location ?? "")
+      }
+      };
+  } catch (err) {
+      console.error("Error fetching job details:", err);
+      jobStore.state.error = "Error loading job details. Please try again later.";
+  } finally {
+      jobStore.state.isLoading = false;
+  }
 });
 </script>
 
