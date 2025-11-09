@@ -144,7 +144,7 @@
           </button>
         </div>
 
-        <form @submit.prevent="jobStore.handleUpdate" class="space-y-4 text-left">
+        <form @submit.prevent="handleUpdate" class="space-y-4 text-left">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
@@ -253,7 +253,7 @@
         </p>
         <div class="flex justify-center gap-4">
           <button
-            @click="jobStore.handleDelete"
+            @click="handleDelete"
             class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
           >
             Yes, Delete
@@ -314,6 +314,48 @@ onMounted(async () => {
       jobStore.state.isLoading = false;
   }
 });
+
+
+async function handleUpdate() {
+    state.updating = true;
+    try {
+        // prepare payload - adapt to your API contract
+        const payload = {
+        title: jobStore.state.job_single.title,
+        salary: jobStore.state.job_single.salary,
+        description: jobStore.state.job_single.description,
+        type: jobStore.state.job_single.type,
+        company: {
+            name: jobStore.state.job_single.company.name,
+            industry: jobStore.state.job_single.company.industry,
+            website: jobStore.state.job_single.company.website,
+            location: jobStore.state.job_single.company.location
+        }
+        };
+
+        await axios.put(`/api/jobs/${jobId}`, payload);
+        toaster.success("Job updated successfully");
+        jobStore.closeModal();
+    } catch (err) {
+        console.error("Error updating job:", err);
+        toaster.error("Failed to update job. Please try again.");
+    } finally {
+        jobStore.state.updating = false;
+    }
+    }
+
+    // delete handlers
+    async function handleDelete() {
+    try {
+        await axios.delete(`/api/jobs/${jobId}`);
+        toaster.success("Job successfully deleted");
+        jobStore.closeModal();
+        router.push("/jobs");
+    } catch (err) {
+        console.error("Error deleting job:", err);
+        toaster.error("Failed to delete job. Please try again.");
+    }
+    }
 </script>
 
 <style scoped>

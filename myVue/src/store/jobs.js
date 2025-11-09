@@ -106,46 +106,7 @@ export const useJobStore = defineStore('job', () =>  {
 
 
     // update handlers
-    async function handleUpdate() {
-    state.updating = true;
-    try {
-        // prepare payload - adapt to your API contract
-        const payload = {
-        title: state.job_single.title,
-        salary: state.job_single.salary,
-        description: state.job_single.description,
-        type: state.job_single.type,
-        company: {
-            name: state.job_single.company.name,
-            industry: state.job_single.company.industry,
-            website: state.job_single.company.website,
-            location: state.job_single.company.location
-        }
-        };
-
-        await axios.put(`/api/jobs/${jobId}`, payload);
-        toaster.success("Job updated successfully");
-        this.closeModal();
-    } catch (err) {
-        console.error("Error updating job:", err);
-        toaster.error("Failed to update job. Please try again.");
-    } finally {
-        state.updating = false;
-    }
-    }
-
-    // delete handlers
-    async function handleDelete() {
-    try {
-        await axios.delete(`/api/jobs/${jobId}`);
-        toaster.success("Job successfully deleted");
-        this.closeModal();
-        router.push("/jobs");
-    } catch (err) {
-        console.error("Error deleting job:", err);
-        toaster.error("Failed to delete job. Please try again.");
-    }
-    }
+    
 
     async function fetchSingleJob() {
         try {
