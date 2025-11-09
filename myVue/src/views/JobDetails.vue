@@ -288,9 +288,7 @@ const { state } = storeToRefs(jobStore);
 
 // fetch job details
 onMounted(async () => {
-    if(jobStore.state.job_single){
-        jobStore.fetchSingleJob();
-    }
+    jobStore.fetchSingleJob();
 });
 </script>
 
